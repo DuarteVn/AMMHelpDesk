@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-=zvt*y*c-(wk-09k6)3=_s6&7_6#4&nir+7j+wjpnd6l&&y3=!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost","*","127.0.0.1"]
 
 
 # Application definition
@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app_helpdesk'
+    'app_helpdesk',
+    #'mod_wsgi.server',
 ]
 
 MIDDLEWARE = [
@@ -55,7 +56,7 @@ ROOT_URLCONF = 'AmmHelpDesk.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-         'DIRS': [os.path.join(BASE_DIR,'templates')],                                                                # SE ALGO DER ERRADO É PORQUE N TEM NADA AQUI BURRÃO
+         'DIRS': [os.path.join(BASE_DIR,'templates')],                                                               
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -77,13 +78,14 @@ WSGI_APPLICATION = 'AmmHelpDesk.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Hdesk',
+        'NAME': 'hdesk',
         'USER': 'user_desk',
         'PASSWORD': 'Etit3gd5V1_cdRLA',
-        'HOST': '34.75.46.159',
+        'HOST': '187.105.63.208',
         'PORT': '3306',
     }
 }
+
 
 
 # Password validation
@@ -114,13 +116,14 @@ TIME_ZONE = 'America/Sao_paulo'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'static')
@@ -131,3 +134,25 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+#EMAIL - Precisa do email + senha do Germano
+
+# DEFAULT_FROM_EMAIL = 'teushiftz@gmail.com'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+# EMAIL_USE_TLS = config('EMAIL_USE_TLS')
+# EMAIL_PORT = config('EMAIL_PORT')
+# EMAIL_HOST = config('EMAIL_HOST')
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'teushiftz@gmail.com'
+EMAIL_HOST_PASSWORD = 'jlrjtgkpenhgdiwi'
+
+

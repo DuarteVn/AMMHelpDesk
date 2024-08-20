@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
+
 
 
 class AppHelpdeskPessoa(models.Model):
@@ -85,16 +87,26 @@ class AppHelpdeskPessoa(models.Model):
 class Cliente(models.Model):
     idcliente = models.AutoField(db_column='IDCliente', primary_key=True)  # Field name made lowercase.
     nomecliente = models.CharField(db_column='NomeCliente', max_length=80)  # Field name made lowercase.
-    cpf_cnpj = models.IntegerField(db_column='Cpf_cnpj')  # Field name made lowercase.
+    cpf_cnpj = models.CharField(db_column='Cpf_cnpj',max_length=20)  # Field name made lowercase.
+    datacriacao = models.DateTimeField(auto_now=True)
     email_cliente = models.CharField(db_column='Email_Cliente', max_length=80)  # Field name made lowercase.
-    telefone_cliente = models.CharField(db_column='Telefone_Cliente', max_length=10)  # Field name made lowercase.
+    telefone_cliente = models.CharField(db_column='Telefone_Cliente', max_length=20)  # Field name made lowercase.
     assunto = models.CharField(db_column='Assunto', max_length=19, blank=True, null=True)  # Field name made lowercase.
     descricao = models.TextField(db_column='Descricao', blank=True, null=True)  # Field name made lowercase.
+    resposta_usuario = models.TextField(db_column='Resposta_chamado', blank=True, null=True)
+    faq_enviar = models.CharField(db_column='Faq_Enviado', max_length=19 , blank=True, null=True)
+    
+    
+    # def __str__(self):
+    #     return self.nomecliente, self.cpf_cnpj, self.email_cliente, self.telefone_cliente, self.assunto, self.descricao
+    
 
     class Meta:
         managed = True
         db_table = 'cliente'
 
+    def get_data_criacao(self):
+        return self.datacriacao.strftime('%d/%m/%Y - %H:%M')
     
 
 
@@ -148,10 +160,21 @@ class Solicitacao(models.Model):
     idcliente = models.ForeignKey(Cliente, models.DO_NOTHING, db_column='IDCliente', blank=True, null=True)  # Field name made lowercase.
     idusuario = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='IDUsuario', blank=True, null=True)  # Field name made lowercase.
     assunto = models.CharField(db_column='Assunto', max_length=19, blank=True, null=True)  # Field name made lowercase.
-    prioridade = models.CharField(db_column='Prioridade', max_length=5, blank=True, null=True)  # Field name made lowercase.
+    prioridade = models.CharField(db_column='Prioridade', max_length=20, blank=True, null=True)  # Field name made lowercase.
     data_solicitacao = models.DateTimeField(db_column='Data_Solicitacao', blank=True, null=True)  # Field name made lowercase.
     solicitacaoaativo = models.CharField(db_column='SolicitacaoaAtivo', max_length=1, blank=True, null=True)  # Field name made lowercase.
 
+    def __str__(self):
+        return self.idsolicitacao
+
+    def cor_status(self):
+        if self.assunto == 'ABERTO':
+            return True
+        else:
+            return False
+    
+    
+    
     class Meta:
         managed = True
         db_table = 'solicitacao'
@@ -164,6 +187,8 @@ class Solicitacaostatus(models.Model):
     idusuario = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='IDUsuario', blank=True, null=True)  # Field name made lowercase.
     datastatus = models.DateTimeField(db_column='DataStatus', blank=True, null=True)  # Field name made lowercase.
 
+    def __str__(self):
+        return self.idsolicitacaostatus, self.idsolicitacao, self.idstatus, self.idusuario, self.datastatus
     class Meta:
         managed = True
         db_table = 'solicitacaostatus'
